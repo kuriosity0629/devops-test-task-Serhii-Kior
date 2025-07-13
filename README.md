@@ -2,13 +2,13 @@
 
 This repository contains a Bash script and a GitHub Actions workflow for the Serhii K's TS test task.
 
-[![Build](https://github.com/kuriosity0629/devops-test-task-Serhii-K/actions/workflows/run-script.yml/badge.svg)](https://github.com/kuriosity0629/devops-test-task-Serhii-K/actions/workflows/run-script.yml)
+[![Build](https://github.com/kuriosity0629/devops-test-task-Serhii-Kior/actions/workflows/run-script.yml/badge.svg)](https://github.com/kuriosity0629/devops-test-task-Serhii-Kior/actions/workflows/run-script.yml)
 
 ## Running the Script Locally
   1. Clone the repository:
      ```bash
-     https://github.com/kuriosity0629/devops-test-task-Serhii-K.git
-     cd devops-test-task-Serhii-K
+     git clone git@github.com:kuriosity0629/devops-test-task-Serhii-Kior.git
+     cd devops-test-task-Serhii-Kior
 
   2. Ensure the script is executable:
      ```bash
