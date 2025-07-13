@@ -1,0 +1,65 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+    inputs:
+      logfile:
+        description: "Log file name (optional)"
+        required: false
+        default: ""
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make hello.sh executable 
+        run: chmod +x ./scripts/hello.sh
+        
+      - name: Run hello.sh
+        run: |
+          if [ -n "${{ github.event.inputs.logfile }}" ]; then
+            ./scripts/hello.sh "${{ github.event.inputs.logfile }}.txt"
+          else
+            ./scripts/hello.sh
+          fi
+          
+      - name: Upload log file
+        uses: actions/upload-artifact@v4
+        with:
+          name: log-file
+          path: logs/*.txt
+          retention-days: 7
+          
+# Check conditions of assignment
+      - name: Validate log file
+        run: |
+          log_file=$(find logs -type f -name "*.txt" ! -name "history.txt" | head -n 1)
+          if [ ! -f "$log_file" ]; then
+            echo "Error: logs not found"
+            exit 1
+          fi
+          
+          declare -A validations=(
+            ["Hello from Bash!"]="Greetings is missing"
+            ["Current date and time: "]="Timestamp is missing"
+            ["Number of regular files in output/:"]="Number of files is missing"
+            ["Number of regular files in output/: [0-9]"]="Number of files must be a number"
+          )
+
+          for i in "${!validations[@]}"; do
+            if ! grep -qE "$i" "$log_file"; then
+              echo "Error: ${validations[$i]}"
+              exit 1
+            fi
+            
+          done
+          
+          echo "Log file has passed"
